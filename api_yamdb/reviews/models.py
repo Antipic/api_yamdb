@@ -23,7 +23,7 @@ class Title(models.Model):
 
     name = models.CharField(max_length=256, verbose_name='Название фильма')
     year = models.IntegerField(verbose_name='Год выхода')
-    description = models.CharField(
+    description = models.TextField(
         max_length=256,
         verbose_name='Описание фильма',
         blank=True,
