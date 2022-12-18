@@ -4,8 +4,12 @@ from .models import User
 
 class UserAdmin(admin.ModelAdmin):
     """Настройка отображения полей"""
-    list_display = ('pk', 'username', 'role')
+    list_display = ('pk', 'username', 'email', 'role')
     list_editable = ('role',)
+    verbose_name = 'Пользователи'
+    list_filter = ('username',)
+    # list_per_page = LIST_PER_PAGE
+    search_fields = ('username', 'role')
 
 
 admin.site.register(User, UserAdmin)
