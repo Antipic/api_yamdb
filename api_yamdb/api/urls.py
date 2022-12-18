@@ -5,16 +5,16 @@ from api.views import ReviewViewSet, CommentViewSet
 
 app_name = 'api'
 
-router = routers.DefaultRouter()
-#router.register('titles')
-#router.register('genres')
-router.register(r'titles/(?P<title_id>\d+)/reviews',
-                ReviewViewSet, basename='reviews')
-router.register(
+router_v1 = routers.DefaultRouter()
+#router_v1.register('titles')
+#router_v1.register('genres')
+router_v1.register(r'titles/(?P<title_id>\d+)/reviews',
+                   ReviewViewSet, basename='reviews')
+router_v1.register(
     r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
     CommentViewSet, basename='comments'
 )
 
 urlpatterns = [
-    path('v1/', include(router.urls)),
+    path('v1/', include(router_v1.urls)),
 ]
