@@ -46,7 +46,6 @@ class UserRecieveJWTSerializer(serializers.Serializer):
     )
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор для модели User."""
 

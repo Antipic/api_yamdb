@@ -34,8 +34,6 @@ class UserCreateViewSet(mixins.CreateModelMixin,
         send_code['username'] = user.username
         send_code['confirmation_code'] = confirmation_code
         Util.send_confirmation_code(send_code)
-        # message = serializer.data
-        # message['confirmation_code'] = confirmation_code
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
