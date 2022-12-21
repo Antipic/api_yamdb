@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='user',
-            name='token',
+            name='token2',
             field=models.CharField(blank=True, max_length=256, verbose_name='Токен'),
         ),
     ]

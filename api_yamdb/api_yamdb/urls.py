@@ -13,7 +13,7 @@ from rest_framework.routers import DefaultRouter
 
 router_v1 = DefaultRouter()
 router_v1.register(r'users', UserViewSet, basename='user')
-# urlpatterns = router.urls
+urlpatterns = router_v1.urls
 
 
 # auth_urls = [
@@ -23,6 +23,7 @@ router_v1.register(r'users', UserViewSet, basename='user')
 #         name='signup'
 #     ),
 # ]
+
 
 urlpatterns = [
     path('api/v1/auth/signup/',
