@@ -57,12 +57,6 @@ class User(AbstractUser):
 
     @property
     def token(self):
-        """
-        Позволяет получить токен пользователя путем вызова user.token, вместо
-        user._generate_jwt_token(). Декоратор @property выше делает это
-        возможным. token называется "динамическим свойством".
-        """
-        # token = str(AccessToken.for_user(self))
         return str(AccessToken.for_user(self))
 
     @property

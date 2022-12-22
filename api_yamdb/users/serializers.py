@@ -27,9 +27,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 'Использовать имя me запрещено!'
             )
         return username
-    # def validate(self, data):
-    #     print("-------------")
-    #     return data
 
 
 class UserRecieveJWTSerializer(serializers.Serializer):
