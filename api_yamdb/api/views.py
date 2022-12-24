@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters, permissions
 from api.serializers import (ReviewSerialiazer, CommentSerializer,
                              CategorySerializer, GenreSerializer,
@@ -42,17 +43,23 @@ class CommentViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    # filter_backends = (filters.SearchFilter,)
-    # search_fields = ('???')
+    pagination_class = PageNumberPagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
 
 
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    # filter_backends = (filters.SearchFilter,)
-    # search_fields = ('???')
+    pagination_class = PageNumberPagination
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     serializer_class = TitleSerializer
     queryset = Title.objects.all()
+    pagination_class = PageNumberPagination
+
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ('name', 'year', 'genre__slug', 'category__slug')
