@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import User
-# Create your models here.
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Category(models.Model):
@@ -67,6 +67,7 @@ class Review(models.Model):
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
+        related_name='reviews',
         verbose_name='Произведение'
     )
     text = models.TextField(
@@ -79,7 +80,8 @@ class Review(models.Model):
     )
 
     score = models.PositiveSmallIntegerField(
-        verbose_name='Рейтинг'
+        verbose_name='Рейтинг',
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
     )
     pub_date = models.DateTimeField(
         auto_now_add=True,

@@ -11,9 +11,8 @@ class ReviewSerialiazer(serializers.ModelSerializer):
     )
 
     class Meta:
-        fields = '__all__'
+        fields = ('id', 'text', 'author', 'score', 'pub_date')
         model = Review
-        read_only_fields = ('author', 'title', 'text', 'score', 'pub_date')
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -24,7 +23,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('author', 'text', 'pub_date')
+        fields = ('id', 'text', 'author', 'pub_date')
 
 
 class TitleSerializer(serializers.ModelSerializer):
@@ -56,27 +55,3 @@ class GenreSerializer(serializers.ModelSerializer):
         fields = '__all__'
         model = Genre
 
-
-# class GenreTitleSerializer(serializers.ModelSerializer):
-#     genre = serializers.SlugRelatedField(
-#         queryset=Genre.objects.all(),
-#         slug_field='genre',
-#         # default=serializers.CurrentUserDefault(),
-#     )
-
-#     title = serializers.SlugRelatedField(
-#         queryset=Title.objects.all(),
-#         slug_field='title',
-#         # default=serializers.CurrentUserDefault(),
-#     )
-
-#     class Meta:
-#         fields = '__all__'
-#         model = GenreTitle
-#         validators = [
-#             UniqueTogetherValidator(
-#                 queryset=GenreTitle.objects.all(),
-#                 fields=('genre', 'title'),
-#             )
-#         ]
-# # 1233
