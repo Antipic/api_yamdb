@@ -41,6 +41,11 @@ class User(AbstractUser):
         'Биография',
         blank=True,
     )
+    user_token = models.CharField(
+        'Токен',
+        max_length=150,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = 'Пользователь'
@@ -52,12 +57,6 @@ class User(AbstractUser):
 
     @property
     def token(self):
-        """
-        Позволяет получить токен пользователя путем вызова user.token, вместо
-        user._generate_jwt_token(). Декоратор @property выше делает это
-        возможным. token называется "динамическим свойством".
-        """
-        # token = str(AccessToken.for_user(self))
         return str(AccessToken.for_user(self))
 
     @property
@@ -71,14 +70,3 @@ class User(AbstractUser):
     @property
     def is_user(self):
         return self.role == self.UserRole.USER
-
-    def _generate_jwt_token(self):
-        """
-        Генерирует веб-токен JSON, в котором хранится идентификатор этого
-        пользователя, срок действия токена составляет 1 день от создания
-        """
-        # dt = datetime.now() + timedelta(days=1)
-
-        token = str(AccessToken.for_user(self))
-
-        return token

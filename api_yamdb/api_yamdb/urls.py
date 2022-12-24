@@ -15,16 +15,8 @@ from rest_framework.routers import DefaultRouter
 
 router_v1 = DefaultRouter()
 router_v1.register(r'users', UserViewSet, basename='user')
-# urlpatterns = router.urls
+urlpatterns = router_v1.urls
 
-
-# auth_urls = [
-#     path(
-#         'signup/',
-#         UserCreateViewSet.as_view({'post': 'create'}),
-#         name='signup'
-#     ),
-# ]
 
 urlpatterns = [
     path('api/v1/auth/signup/',
@@ -40,11 +32,4 @@ urlpatterns = [
         'redoc/',
         TemplateView.as_view(template_name='redoc.html'),
         name='redoc'),
-    path('api/v1/auth/token/',
-         TokenObtainPairView.as_view(),
-         name='token_obtain_pair'),
-    path('api/v1/auth/token/refresh/',
-         TokenRefreshView.as_view(),
-         name='token_refresh'),
-    path('api/', include('api.urls')),
 ]
