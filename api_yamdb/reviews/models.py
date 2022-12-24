@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import User
-# Create your models here.
+from django.core.validators import MaxValueValidator, MinValueValidator
+import datetime as dt
 
 
 class Category(models.Model):
@@ -22,7 +23,11 @@ class Genre(models.Model):
 class Title(models.Model):
 
     name = models.CharField(max_length=256, verbose_name='Название')
-    year = models.IntegerField(verbose_name='Год выхода')
+    year = models.IntegerField(
+        verbose_name='Год выхода',
+        validators=[MinValueValidator(1),
+                    MaxValueValidator(dt.datetime.now().year)],
+    )
     description = models.TextField(
         max_length=256,
         verbose_name='Описание',
@@ -31,13 +36,12 @@ class Title(models.Model):
     )
 
     genre = models.ManyToManyField(
-        'Genre',
+        Genre,
         through='GenreTitle',
-        through_fields=('title', 'genre')
     )
 
     category = models.ForeignKey(
-        'Category',
+        Category,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -51,6 +55,14 @@ class GenreTitle(models.Model):
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'genre'],
+                name='unique_title_genre'
+            )
+        ]
+
     def __str__(self):
         return (f'{self.title} - {self.genre}')
 
@@ -59,6 +71,7 @@ class Review(models.Model):
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
+        related_name='reviews',
         verbose_name='Произведение'
     )
     text = models.TextField(
@@ -71,7 +84,8 @@ class Review(models.Model):
     )
 
     score = models.PositiveSmallIntegerField(
-        verbose_name='Рейтинг'
+        verbose_name='Рейтинг',
+        validators=[MinValueValidator(1), MaxValueValidator(10)],
     )
     pub_date = models.DateTimeField(
         auto_now_add=True,
