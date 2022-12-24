@@ -31,13 +31,13 @@ class Title(models.Model):
     )
 
     genre = models.ManyToManyField(
-        'Genre',
+        Genre,
         through='GenreTitle',
-        through_fields=('title', 'genre')
+        # through_fields=('title', 'genre')
     )
 
     category = models.ForeignKey(
-        'Category',
+        Category,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -50,6 +50,14 @@ class Title(models.Model):
 class GenreTitle(models.Model):
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'genre'],
+                name='unique_title_genre'
+            )
+        ]
 
     def __str__(self):
         return (f'{self.title} - {self.genre}')
