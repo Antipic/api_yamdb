@@ -8,8 +8,7 @@ class UserAdmin(admin.ModelAdmin):
     list_editable = ('role',)
     verbose_name = 'Пользователи'
     list_filter = ('username',)
-    readonly_fields = ('user_token',)
-    # list_per_page = LIST_PER_PAGE
+    readonly_fields = ('code',)
     search_fields = ('username', 'role')
 
 

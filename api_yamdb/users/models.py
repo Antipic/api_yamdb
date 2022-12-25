@@ -4,6 +4,16 @@ from rest_framework_simplejwt.tokens import AccessToken
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
+USER = 'user'
+ADMIN = 'admin'
+MODERATOR = 'moderator'
+
+ROLE_CHOICES = [
+    (USER, USER),
+    (ADMIN, ADMIN),
+    (MODERATOR, MODERATOR),
+]
+
 
 class User(AbstractUser):
 
@@ -14,7 +24,7 @@ class User(AbstractUser):
 
     role = models.CharField(
         'Роли',
-        choices=UserRole.choices,
+        choices=ROLE_CHOICES,
         default=UserRole.USER,
         max_length=10
     )
@@ -41,9 +51,9 @@ class User(AbstractUser):
         'Биография',
         blank=True,
     )
-    user_token = models.CharField(
+    code = models.CharField(
         'Токен',
-        max_length=150,
+        max_length=50,
         blank=True,
     )
 

@@ -92,6 +92,16 @@ class Review(models.Model):
         verbose_name='Дата публикации рецензии'
     )
 
+    class Meta:
+        verbose_name = 'Отзыв'
+        verbose_name_plural = 'Отзывы'
+        constraints = [
+            models.UniqueConstraint(
+                fields=('title', 'author', ),
+                name='unique review'
+            )]
+        ordering = ('pub_date',)
+
     def __str__(self):
         return self.text[:30]
 
