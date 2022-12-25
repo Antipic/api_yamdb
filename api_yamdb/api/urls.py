@@ -3,16 +3,16 @@ from rest_framework import routers
 
 from api.views import (ReviewViewSet, CommentViewSet,
                        TitleViewSet, GenreViewSet, CategoryViewSet)
-from users.views import (UserCreateViewSet, UserReceiveJWTViewSet, 
-                       UserViewSet)
+from users.views import (UserCreateViewSet, UserReceiveJWTViewSet,
+                         UserViewSet)
 
 app_name = 'api'
 
 router_v1 = routers.DefaultRouter()
 router_v1.register(r'users', UserViewSet, basename='user')
-router_v1.register('titles', TitleViewSet, basename = 'title')
-router_v1.register('genres', GenreViewSet, basename = 'genres')
-router_v1.register('categories', CategoryViewSet, basename = 'categories')
+router_v1.register('titles', TitleViewSet, basename='title')
+router_v1.register('genres', GenreViewSet, basename='genres')
+router_v1.register('categories', CategoryViewSet, basename='categories')
 
 router_v1.register(r'titles/(?P<title_id>\d+)/reviews',
                    ReviewViewSet, basename='reviews')
