@@ -1,3 +1,9 @@
+from django.db.models import Avg
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, viewsets
+from rest_framework.pagination import PageNumberPagination
+
 from api.filters import TitleFilter
 from api.mixins import CreateDestroyListViewSet
 from api.permissions import (AdminModeratorAuthorPermission,
@@ -5,11 +11,7 @@ from api.permissions import (AdminModeratorAuthorPermission,
 from api.serializers import (CategorySerializer, CommentSerializer,
                              GenreSerializer, ReadTitleSerializer,
                              ReviewSerialiazer, TitleSerializer)
-from django.db.models import Avg
-from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, viewsets
-from rest_framework.pagination import PageNumberPagination
+
 from reviews.models import Category, Genre, Title
 
 
