@@ -1,7 +1,7 @@
-from django.db import models
-from users.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
-import datetime as dt
+from django.db import models
+from reviews.validators import year_validator
+from users.models import User
 
 
 class Category(models.Model):
@@ -25,8 +25,7 @@ class Title(models.Model):
     name = models.CharField(max_length=256, verbose_name='Название')
     year = models.IntegerField(
         verbose_name='Год выхода',
-        validators=[MinValueValidator(1),
-                    MaxValueValidator(dt.datetime.now().year)],
+        validators=[year_validator],
     )
     description = models.TextField(
         max_length=256,
@@ -85,7 +84,10 @@ class Review(models.Model):
 
     score = models.PositiveSmallIntegerField(
         verbose_name='Рейтинг',
-        validators=[MinValueValidator(1), MaxValueValidator(10)],
+        validators=[
+            MinValueValidator(1, 'Нельзя поставить оценку меньше 1'),
+            MaxValueValidator(10, 'Нельзя поставить оценку больше 10')
+        ],
     )
     pub_date = models.DateTimeField(
         auto_now_add=True,
@@ -123,6 +125,11 @@ class Comment(models.Model):
         auto_now_add=True,
         verbose_name='Дата публикации комментария'
     )
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ('pub_date',)
 
     def __str__(self):
         return self.text[:30]

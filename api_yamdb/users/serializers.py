@@ -17,7 +17,7 @@ class UserCreateSerializer(serializers.Serializer):
     def validate(self, data):
         if_username = User.objects.filter(username=data['username']).exists()
         if_email = User.objects.filter(email=data['email']).exists()
-        if data['username'] == 'me':
+        if data['username'].lower() == 'me':
             raise serializers.ValidationError(
                 'Использовать имя me запрещено!'
             )
@@ -26,16 +26,9 @@ class UserCreateSerializer(serializers.Serializer):
             return data
         if if_username:
             raise serializers.ValidationError('Данные уже были использованы')
-        if if_email is True:
+        if if_email:
             raise serializers.ValidationError('Почта уже была использована')
         return data
-
-    def validate_username(self, username):
-        if username in 'me':
-            raise serializers.ValidationError(
-                'Использовать имя me запрещено!'
-            )
-        return username
 
 
 class UserRecieveJWTSerializer(serializers.Serializer):
@@ -62,7 +55,7 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def validate_username(self, username):
-        if username == 'me':
+        if username.lower() == 'me':
             raise serializers.ValidationError(
                 'Использовать имя me запрещено!'
             )

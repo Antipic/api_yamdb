@@ -6,7 +6,7 @@ class TitleFilter(filters.FilterSet):
     genre = filters.CharFilter(lookup_expr='slug')
     category = filters.CharFilter(lookup_expr='slug')
     name = filters.CharFilter(lookup_expr='icontains')
-    # year
+    year = filters.CharFilter(lookup_expr='icontains')
 
     class Meta:
         model = Title

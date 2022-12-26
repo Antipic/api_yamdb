@@ -1,29 +1,16 @@
+from api.filters import TitleFilter
+from api.mixins import CreateDestroyListViewSet
+from api.permissions import (AdminModeratorAuthorPermission,
+                             IsAdminUserOrReadOnly)
+from api.serializers import (CategorySerializer, CommentSerializer,
+                             GenreSerializer, ReadTitleSerializer,
+                             ReviewSerialiazer, TitleSerializer)
+from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from api.filters import TitleFilter
-from rest_framework import viewsets, filters, mixins
-from api.serializers import (
-    ReviewSerialiazer,
-    CommentSerializer,
-    CategorySerializer,
-    GenreSerializer,
-    TitleSerializer,
-)
-from api.permissions import (
-    AdminModeratorAuthorPermission,
-    IsAdminUserOrReadOnly
-)
+from rest_framework import filters, viewsets
 from rest_framework.pagination import PageNumberPagination
-
-from reviews.models import (Title, Category, Genre,)
-from django.db.models import Avg
-
-
-class CustomViewSet(
-    mixins.CreateModelMixin, mixins.DestroyModelMixin,
-    mixins.ListModelMixin, viewsets.GenericViewSet
-):
-    pass
+from reviews.models import Category, Genre, Title
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -56,7 +43,7 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, review=review)
 
 
-class CategoryViewSet(CustomViewSet):
+class CategoryViewSet(CreateDestroyListViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = PageNumberPagination
@@ -66,7 +53,7 @@ class CategoryViewSet(CustomViewSet):
     search_fields = ('name',)
 
 
-class GenreViewSet(CustomViewSet):
+class GenreViewSet(CreateDestroyListViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     pagination_class = PageNumberPagination
@@ -84,3 +71,8 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminUserOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = TitleFilter
+
+    def get_serializer_class(self):
+        if self.action in ['create', 'update', 'partial_update']:
+            return TitleSerializer
+        return ReadTitleSerializer

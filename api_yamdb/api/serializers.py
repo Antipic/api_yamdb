@@ -1,7 +1,7 @@
-from rest_framework import serializers
-from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
-from reviews.models import Category, Title, Genre, Review, Comment
+from django.shortcuts import get_object_or_404
+from rest_framework import serializers
+from reviews.models import Category, Comment, Genre, Review, Title
 
 
 class ReviewSerialiazer(serializers.ModelSerializer):
@@ -42,31 +42,6 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ('id', 'text', 'author', 'pub_date')
 
 
-class TitleSerializer(serializers.ModelSerializer):
-    category = serializers.SlugRelatedField(
-        slug_field='slug',
-        queryset=Category.objects.all(),
-    )
-    genre = serializers.SlugRelatedField(
-        slug_field='slug',
-        queryset=Genre.objects.all(),
-        many=True,
-    )
-    rating = serializers.IntegerField(required=False)
-
-    class Meta:
-        fields = '__all__'
-        model = Title
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        genre = Genre.objects.filter(slug__in=data['genre'])
-        category = Category.objects.get(slug=data['category'])
-        data['genre'] = GenreSerializer(instance=genre, many=True).data
-        data['category'] = CategorySerializer(instance=category).data
-        return data
-
-
 class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -80,3 +55,28 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('name', 'slug')
         model = Genre
+
+
+class TitleSerializer(serializers.ModelSerializer):
+    genre = serializers.SlugRelatedField(
+        queryset=Genre.objects.all(), slug_field='slug', many=True
+    )
+    category = serializers.SlugRelatedField(
+        queryset=Category.objects.all(), slug_field='slug'
+    )
+
+    class Meta:
+        model = Title
+        fields = ('id', 'name', 'year', 'description',
+                  'genre', 'category')
+
+
+class ReadTitleSerializer(serializers.ModelSerializer):
+    rating = serializers.IntegerField(read_only=True)
+    genre = GenreSerializer(read_only=True, many=True)
+    category = CategorySerializer(read_only=True)
+
+    class Meta:
+        model = Title
+        fields = ('id', 'name', 'year', 'description',
+                  'genre', 'category', 'rating',)

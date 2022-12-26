@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
-from rest_framework_simplejwt.tokens import AccessToken
 from django.core.validators import RegexValidator
+from django.db import models
 from django.utils.translation import gettext_lazy as _
+from rest_framework_simplejwt.tokens import AccessToken
 
 USER = 'user'
 ADMIN = 'admin'
@@ -60,7 +60,11 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        unique_together = ('username', 'email')
+        constraints = [
+            models.UniqueConstraint(
+                fields=('username', 'email', ),
+                name='unique user'
+            )]
 
     def __str__(self):
         return self.username
